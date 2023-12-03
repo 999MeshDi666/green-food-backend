@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Orders = require("../models/Orders");
+const Orders = require("../models/OrdersModel");
 
 router.get("/", (req, res) => {
   res.send("main orders");

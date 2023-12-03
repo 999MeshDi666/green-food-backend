@@ -9,12 +9,13 @@ const orders = require("./routes/orders");
 app.use(express.json());
 app.use("/api/catalogs", catalogs);
 app.use("/api/orders", orders);
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("mongo has been connected");
     app.listen(port, () => {
-      console.log("start");
+      console.log("start on port: ", port);
     });
   })
   .catch((error) => {
