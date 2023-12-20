@@ -31,14 +31,14 @@ const createCatalogItem = async (req, res) => {
   if (!req.file) {
     return res.status(404).json({ error: `files: ${req.files} error` });
   }
-  console.log(req.file);
-  const image = {
-    data: req.file.originalname,
-    contentType: req.file.mimetype,
-  };
 
   try {
-    const data = await Catalogs.create({ title, desc, price, image });
+    const data = await Catalogs.create({
+      title,
+      desc,
+      price,
+      image: req.file.path,
+    });
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -50,7 +50,14 @@ const updateCatalogItem = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: `id: ${id} is not valid` });
   }
-  const data = await Catalogs.findOneAndUpdate({ _id: id }, { ...req.body });
+  if (!req.file) {
+    return res.status(404).json({ error: `files: ${req.files} error` });
+  }
+
+  const data = await Catalogs.findOneAndUpdate(
+    { _id: id },
+    { ...req.body, image: req.file.path }
+  );
   if (!data) {
     return res
       .status(404)

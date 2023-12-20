@@ -9,7 +9,7 @@ const orders = require('./routes/orders');
 app.use(express.json());
 app.use('/api/catalogs', catalogs);
 app.use('/api/orders', orders);
-
+app.use(express.static('uploads'));
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
