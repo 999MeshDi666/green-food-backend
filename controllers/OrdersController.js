@@ -1,5 +1,5 @@
-const Orders = require("../models/OrdersModel");
-const mongoose = require("mongoose");
+const Orders = require('../models/OrdersModel');
+const mongoose = require('mongoose');
 
 const getAllOrderItems = async (req, res) => {
   try {
@@ -23,9 +23,17 @@ const getOrderItemsById = async (req, res) => {
 };
 
 const createOrderItems = async (req, res) => {
-  const { title, amount, price, image } = req.body;
+  const { title, amount, price } = req.body;
+  if (!req.file) {
+    return res.status(404).json({ error: `file: ${req.file} error` });
+  }
   try {
-    const data = await Orders.create({ title, amount, price, image });
+    const data = await Orders.create({
+      title,
+      amount,
+      price,
+      image: req.file.path,
+    });
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -35,9 +43,15 @@ const createOrderItems = async (req, res) => {
 const updateOrderItems = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: `id: ${id} is not valid` });
+    return res.status(404).json({ error: `id: ${id} is not valid` });
   }
-  const data = await Orders.findOneAndUpdate({ _id: id }, { ...req.body });
+  if (!req.file) {
+    return res.status(404).json({ error: `file: ${req.file} error` });
+  }
+  const data = await Orders.findOneAndUpdate(
+    { _id: id },
+    { ...req.body, image: req.file.path }
+  );
   if (!data) {
     return res
       .status(404)
@@ -49,7 +63,7 @@ const updateOrderItems = async (req, res) => {
 const deleteOrderItems = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: `id: ${id} is not valid` });
+    return res.status(404).json({ error: `id: ${id} is not valid` });
   }
   const data = await Orders.findByIdAndDelete({ _id: id });
   if (!data) {

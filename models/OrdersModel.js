@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orders = Schema(
@@ -16,12 +16,11 @@ const orders = Schema(
       required: true,
     },
     image: {
-      type: Buffer,
-      contentType: String,
+      type: String,
       required: false,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Orders", orders);
+module.exports = mongoose.model('Orders', orders);

@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const getAllCatalogItems = async (req, res) => {
   try {
     const data = await Catalogs.find({}).sort({ createdAt: -1 });
-
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ error: error.message });
